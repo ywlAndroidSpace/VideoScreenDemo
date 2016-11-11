@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">VideoScreenDemo</string>
+    <string name="sure">确定</string>
+    <string name="back">返回</string>
+    <string name="unknow_error">未知错误</string>
+    <string name="network_disable">网络不可用</string>
+    <string name="call_reject">拒接</string>
+    <string name="call_answer">接听</string>
+
+</resources>
