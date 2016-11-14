@@ -38,7 +38,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     Toast.makeText(context, "success!", Toast.LENGTH_LONG).show();
                     return;
                 } else {
-                    Toast.makeText(context, msgTxt, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(context, msgTxt, Toast.LENGTH_LONG).show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

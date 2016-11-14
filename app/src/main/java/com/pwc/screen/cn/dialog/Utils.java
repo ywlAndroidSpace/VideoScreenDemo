@@ -4,16 +4,14 @@ package com.pwc.screen.cn.dialog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.pwc.screen.cn.VideoActivity;
+import com.pwc.screen.cn.R;
+import com.pwc.screen.cn.video.MeetingActivity;
 
 
 public class Utils {
@@ -89,7 +87,9 @@ public class Utils {
      * 接听电话
      */
     public static synchronized void answerRingingCall(Context ctx) {
-        Intent intent=new Intent(ctx, VideoActivity.class);
+        Intent intent = new Intent(ctx, MeetingActivity.class);
+        intent.putExtra(MeetingActivity.EXTRA_CHANNEL_ID, "123");
+        intent.putExtra(MeetingActivity.EXTRA_VENDOR_KEY, ctx.getString(R.string.vendor_key));
         ctx.startActivity(intent);
     }
 
@@ -97,7 +97,9 @@ public class Utils {
      * 接听电话
      */
     public static synchronized void answerCall(Context ctx) {
-        Intent intent=new Intent(ctx, VideoActivity.class);
+        Intent intent = new Intent(ctx, MeetingActivity.class);
+        intent.putExtra(MeetingActivity.EXTRA_CHANNEL_ID, "123");
+        intent.putExtra(MeetingActivity.EXTRA_VENDOR_KEY, ctx.getString(R.string.vendor_key));
         ctx.startActivity(intent);
     }
 }

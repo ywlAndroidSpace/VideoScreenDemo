@@ -3,7 +3,6 @@ package com.pwc.screen.cn.dialog;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -19,16 +18,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.pwc.screen.cn.R;
-import com.pwc.screen.cn.VideoActivity;
+import com.pwc.screen.cn.video.MeetingActivity;
 
 
 /**
  * 半屏显示
- * 
+ *
  * @author likebamboo
  */
 public class OverlayView extends Overlay {
@@ -52,8 +49,6 @@ public class OverlayView extends Overlay {
 
 
     private static View overlay_dealwith_layout;
-    private static View llVideo;
-    private static Button btn_scanel;
 
 
     /**
@@ -65,6 +60,7 @@ public class OverlayView extends Overlay {
      * 接听电话按钮
      */
     private static Button mAnswerCallBt = null;
+
 
     @SuppressLint("HandlerLeak")
     private static Handler handler = new Handler() {
@@ -83,7 +79,7 @@ public class OverlayView extends Overlay {
 
     /**
      * 显示
-     * 
+     *
      * @param context 上下文对象
      * @param number
      */
@@ -92,7 +88,7 @@ public class OverlayView extends Overlay {
             mContext = context;
 
             init(context, number, R.layout.call_over_layout, percentScreen);
-            InputMethodManager imm = (InputMethodManager)context
+            InputMethodManager imm = (InputMethodManager) context
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,
                     InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -104,10 +100,10 @@ public class OverlayView extends Overlay {
 
     /**
      * 初始化布局
-     * 
+     *
      * @param context 上下文对象
-     * @param number 电话号码
-     * @param layout 布局文件
+     * @param number  电话号码
+     * @param layout  布局文件
      * @return 布局
      */
     private static ViewGroup init(Context context, String number, int layout, int percentScreen) {
@@ -128,11 +124,10 @@ public class OverlayView extends Overlay {
 
         if (percentScreen == 100) {
             // 接听电话与挂断电话
-            mEndCallBt = (Button)v.findViewById(R.id.overlay_end_call_bt);
-            mAnswerCallBt = (Button)v.findViewById(R.id.overlay_answer_call_bt);
+            mEndCallBt = (Button) v.findViewById(R.id.overlay_end_call_bt);
+            mAnswerCallBt = (Button) v.findViewById(R.id.overlay_answer_call_bt);
             overlay_dealwith_layout = v.findViewById(R.id.overlay_dealwith_layout);
-            llVideo = v.findViewById(R.id.llVideo);
-            btn_scanel = (Button) llVideo.findViewById(R.id.btn_scanel);
+
             addListener();
         }
     }
@@ -154,24 +149,28 @@ public class OverlayView extends Overlay {
                 // TODO Auto-generated method stub
                 if (Utils.hasGingerbread()) {
                     overlay_dealwith_layout.setVisibility(View.GONE);
-                    llVideo.setVisibility(View.VISIBLE);
+                    startMeeting();
                 } else {
                     overlay_dealwith_layout.setVisibility(View.GONE);
-                    llVideo.setVisibility(View.VISIBLE);
+                    startMeeting();
                 }
-            }
-        });
-        btn_scanel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hide(mContext);
             }
         });
     }
 
+    private static void startMeeting() {
+        Intent intent = new Intent(mContext, MeetingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(MeetingActivity.EXTRA_CHANNEL_ID, "123");
+        intent.putExtra(MeetingActivity.EXTRA_VENDOR_KEY, mContext.getString(R.string.vendor_key));
+        mContext.startActivity(intent);
+        hide(mContext);
+    }
+
+
     /**
      * 获取显示参数
-     * 
+     *
      * @return
      */
     private static WindowManager.LayoutParams getShowingParams() {
@@ -202,7 +201,7 @@ public class OverlayView extends Overlay {
 
     /**
      * 获取界面显示的高度 ，默认为手机高度的2/3
-     * 
+     *
      * @param context 上下文对象
      * @return
      */
@@ -212,7 +211,7 @@ public class OverlayView extends Overlay {
 
     @SuppressWarnings("deprecation")
     private static int getLarger(Context context) {
-        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         int height = 0;
         if (Utils.hasHoneycombMR2()) {
@@ -241,7 +240,7 @@ public class OverlayView extends Overlay {
         synchronized (monitor) {
             if (mOverlay != null) {
                 try {
-                    WindowManager wm = (WindowManager)context
+                    WindowManager wm = (WindowManager) context
                             .getSystemService(Context.WINDOW_SERVICE);
                     // Remove view from WindowManager
                     wm.removeView(mOverlay);

@@ -1,48 +1,36 @@
 package com.pwc.screen.cn;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 
-import com.pwc.screen.cn.dialog.OverlayView;
-import com.pwc.screen.cn.dialog.ShowPref;
+import com.pwc.screen.cn.video.MeetingActivity;
 
-public class MainActivity extends Activity {
-    /**
-     * 配置信息
-     */
-    private ShowPref pref = null;
-
+public class MainActivity extends Activity implements View.OnClickListener {
+    private Button btnStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setDialog();
+        btnStart = (Button) findViewById(R.id.btnStart);
+        btnStart.setOnClickListener(this);
     }
 
-    private void setDialog() {
-        pref = ShowPref.getInstance(this);
-        pref.putInt(ShowPref.SHOW_TYPE, ShowPref.TYPE_FULL_DIALOG);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                showWindow(MainActivity.this, "who are you?", 100);
-            }
-        }, 100);
-        return;
+    private void startVideo() {
+        Intent intent = new Intent(this, MeetingActivity.class);
+        intent.putExtra(MeetingActivity.EXTRA_CHANNEL_ID, "123");
+        intent.putExtra(MeetingActivity.EXTRA_VENDOR_KEY, getString(R.string.vendor_key));
+        startActivity(intent);
     }
 
-    /**
-     * 显示来电弹窗
-     *
-     * @param ctx 上下文对象
-     * @param number 电话号码
-     */
-    private void showWindow(Context ctx, String number, int percentScreen) {
-        OverlayView.show(ctx, number, percentScreen);
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnStart) {
+            startVideo();
+        }
     }
 }
