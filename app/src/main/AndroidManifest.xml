@@ -19,6 +19,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 读取手机状态的权限 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!--调用系统震动d的方法-->
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:name=".video.AgoraApplication"
         android:allowBackup="true"
@@ -41,10 +44,6 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <service
-            android:name=".dialog.ScreenService"
-            android:label="@string/app_name" >
-        </service>
     </application>
 
 </manifest>

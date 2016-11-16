@@ -58,6 +58,7 @@ public class SmsReceiver extends BroadcastReceiver {
      * @param number 电话号码
      */
     private void showWindow(Context ctx, String number, int percentScreen) {
+
         OverlayView.show(ctx, number, percentScreen);
     }
 }

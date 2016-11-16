@@ -8,9 +8,14 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +26,8 @@ import android.widget.Button;
 
 import com.pwc.screen.cn.R;
 import com.pwc.screen.cn.video.MeetingActivity;
+
+import java.io.IOException;
 
 
 /**
@@ -61,6 +68,9 @@ public class OverlayView extends Overlay {
      */
     private static Button mAnswerCallBt = null;
 
+    private static MediaPlayer mMediaPlayer;
+    private static Vibrator vibrator;
+
 
     @SuppressLint("HandlerLeak")
     private static Handler handler = new Handler() {
@@ -94,7 +104,55 @@ public class OverlayView extends Overlay {
                     InputMethodManager.HIDE_IMPLICIT_ONLY);
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
+            getRingerMode();
+
         }
+    }
+
+    private static void getRingerMode() {
+        AudioManager audio = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        int ringerMode = audio.getRingerMode();
+        switch (ringerMode){
+            case AudioManager.RINGER_MODE_SILENT://静音的
+                startVibrator();
+                break;
+            case AudioManager.RINGER_MODE_NORMAL://正常的
+                startNormalAlarm();
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE://震动的
+                startVibrator();
+                break;
+        }
+    }
+    private static void startVibrator(){
+        vibrator = (Vibrator) mContext.getSystemService(mContext.VIBRATOR_SERVICE);
+        long[] pattern = {1000,1500,1000,1500};
+        vibrator.vibrate(pattern,0);
+    }
+
+    private static void startNormalAlarm() {
+        mMediaPlayer = MediaPlayer.create(mContext, getSystemDefultRingtoneUri());
+        mMediaPlayer.setLooping(true);
+        try {
+            mMediaPlayer.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mMediaPlayer.start();
+    }
+    //获取系统默认铃声的Uri
+    private static Uri getSystemDefultRingtoneUri() {
+        return RingtoneManager.getActualDefaultRingtoneUri(mContext,
+                RingtoneManager.TYPE_RINGTONE);
+    }
+
+    private static void closeRingtone(){
+        if(mMediaPlayer!=null)
+            mMediaPlayer.stop();
+        if (vibrator != null)
+            vibrator.cancel();
     }
 
 
@@ -141,11 +199,13 @@ public class OverlayView extends Overlay {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 hide(mContext);
+                closeRingtone();
             }
         });
         mAnswerCallBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeRingtone();
                 // TODO Auto-generated method stub
                 if (Utils.hasGingerbread()) {
                     overlay_dealwith_layout.setVisibility(View.GONE);
@@ -154,6 +214,7 @@ public class OverlayView extends Overlay {
                     overlay_dealwith_layout.setVisibility(View.GONE);
                     startMeeting();
                 }
+
             }
         });
     }

@@ -29,5 +29,4 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile files('libs/crasheye.jar')
     compile files('libs/agora-rtc-sdk.jar')
-    compile files('libs/fastjson.jar')
 }

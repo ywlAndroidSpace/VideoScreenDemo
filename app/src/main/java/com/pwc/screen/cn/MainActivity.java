@@ -11,12 +11,14 @@ import com.pwc.screen.cn.video.MeetingActivity;
 public class MainActivity extends Activity implements View.OnClickListener {
     private Button btnStart;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnStart = (Button) findViewById(R.id.btnStart);
         btnStart.setOnClickListener(this);
+
     }
 
     private void startVideo() {
@@ -33,4 +35,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             startVideo();
         }
     }
+
+
+
 }
